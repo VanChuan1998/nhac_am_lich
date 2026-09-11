@@ -1,0 +1,25 @@
+name: Deploy Website to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'am-lich-website/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Workers
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: am-lich-website
+          command: deploy
