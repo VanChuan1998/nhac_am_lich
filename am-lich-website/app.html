@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thêm ngày âm lịch — Nhắc Âm Lịch</title>
+<meta name="description" content="Thêm ngày giỗ, mùng một, ngày rằm theo âm lịch Việt Nam thẳng vào Google Calendar, từ điện thoại.">
+<meta name="theme-color" content="#9a3412">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nhắc Âm Lịch">
+<style>
+:root {
+  --bg:#fbfaf7; --panel:#fff; --ink:#1c1917; --muted:#78716c;
+  --line:#e7e5e4; --accent:#9a3412; --soft:#fef3c7; --ok:#3f6212; --hot:#c2410c;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#1c1917; --panel:#262322; --ink:#f5f5f4; --muted:#a8a29e;
+    --line:#3a3634; --accent:#fdba74; --soft:#3a2a17; --ok:#a3c057; --hot:#fb923c;
+    color-scheme: dark;
+  }
+}
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+[hidden] { display:none !important; }
+body {
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.wrap { max-width:560px; margin:0 auto; padding:0 16px 48px; }
+
+header {
+  background:var(--soft); margin:0 -16px 20px; padding:22px 20px 20px;
+  padding-top:calc(22px + env(safe-area-inset-top));
+}
+.today-solar { font-size:13px; color:var(--muted); }
+.today-lunar { font-size:24px; font-weight:650; letter-spacing:-.02em; margin-top:2px; }
+
+h2 { font-size:15px; margin:24px 0 10px; letter-spacing:-.01em; }
+
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px; }
+
+label { display:block; margin-bottom:14px; }
+label > span { display:block; font-size:13px; color:var(--muted); margin-bottom:5px; }
+input[type=text], select {
+  width:100%; padding:12px 12px; border:1px solid var(--line); border-radius:10px;
+  background:var(--bg); color:var(--ink); font:inherit; font-size:16px;
+}
+.row { display:flex; gap:10px; }
+.row > * { flex:1; min-width:0; }
+
+fieldset { border:1px solid var(--line); border-radius:10px; padding:10px 12px 12px; margin:0 0 14px; }
+legend { font-size:13px; color:var(--muted); padding:0 5px; }
+.chk { display:flex; align-items:center; gap:9px; padding:7px 0; margin:0; font-size:15px; }
+.chk input { width:20px; height:20px; margin:0; accent-color:var(--accent); }
+
+button {
+  font:inherit; font-size:16px; border-radius:10px; cursor:pointer;
+  border:1px solid var(--line); background:var(--panel); color:var(--ink);
+  padding:13px 18px; width:100%;
+}
+button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:650; }
+@media (prefers-color-scheme: dark) { button.primary { color:#1c1917; } }
+button:disabled { opacity:.5; }
+.btn-row { display:flex; gap:10px; margin-top:4px; }
+
+.preview { margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; }
+.preview h3 { font-size:13px; color:var(--muted); margin:0 0 8px; font-weight:500; }
+.preview ol { margin:0; padding-left:20px; }
+.preview li { font-size:14px; padding:2px 0; font-variant-numeric:tabular-nums; }
+.preview .more { font-size:13px; color:var(--muted); margin-top:6px; }
+
+.msg { margin-top:14px; font-size:14px; padding:12px 14px; border-radius:10px; }
+.msg.good { background:var(--soft); color:var(--ink); }
+.msg.bad { background:var(--soft); color:var(--hot); }
+
+.acct { display:flex; align-items:center; gap:9px; font-size:13px; color:var(--muted); margin-top:16px; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--muted); flex:none; }
+.dot.on { background:var(--ok); }
+.linkbtn { background:none; border:0; padding:0; width:auto; color:var(--muted);
+  text-decoration:underline; text-underline-offset:2px; font-size:13px; }
+
+footer { margin-top:28px; text-align:center; font-size:12.5px; color:var(--muted); }
+footer a { color:var(--muted); }
+
+.intro { color: var(--muted); font-size: 14px; line-height: 1.65; }
+.introlinks { margin-top: 12px; }
+.langbar { display:flex; gap:8px; margin:0 0 16px; }
+.langbar button {
+  font:inherit; font-size:13px; cursor:pointer; width:auto;
+  border:1px solid var(--line); background:var(--panel);
+  color:var(--muted); border-radius:8px; padding:6px 13px;
+}
+.langbar button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+@media (prefers-color-scheme: dark) { .langbar button[aria-pressed="true"] { color:#1c1917; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="today-solar" id="t-solar">—</div>
+    <div class="today-lunar" id="t-lunar">—</div>
+  </header>
+
+  <div class="langbar" role="group" aria-label="Language / Ngôn ngữ">
+    <button type="button" data-lang="vi" aria-pressed="true">Tiếng Việt</button>
+    <button type="button" data-lang="en" aria-pressed="false">English</button>
+  </div>
+
+  <!-- Giải thích ngay đầu trang, trước cả form. Trang này là nơi duy nhất có nút
+       đăng nhập Google, nên nó phải tự nói rõ mình là gì và xin quyền để làm gì —
+       không để ai, kể cả người duyệt tự động, hiểu nhầm thành một bức tường chặn. -->
+  <div class="card intro">
+    <p data-i18n="intro1" style="margin-top:0">
+      Thêm một ngày âm lịch — giỗ, mùng một, ngày rằm, đám cưới — vào Google Calendar của bạn.
+      Trang tính sẵn ngày dương tương ứng cho nhiều năm tới.
+    </p>
+    <p data-i18n="intro2" style="margin-bottom:0">
+      Bạn chỉ cần đăng nhập Google ở bước cuối, khi bấm tạo sự kiện. Quyền duy nhất được xin là
+      quyền tạo và sửa sự kiện trên lịch của chính bạn. Không có tài khoản nào phải lập,
+      không dữ liệu nào rời khỏi máy bạn ngoài chính sự kiện bạn vừa tạo.
+    </p>
+    <p class="introlinks" style="margin-bottom:0">
+      <a href="index.html" data-i18n="intro_home">Giới thiệu tiện ích</a> ·
+      <a href="privacy.html" data-i18n="intro_privacy">Chính sách bảo mật</a>
+    </p>
+  </div>
+
+  <div class="card">
+    <label>
+      <span data-i18n="l_title">Tên sự kiện</span>
+      <input id="title" type="text" maxlength="60" autocomplete="off">
+    </label>
+
+    <div class="row">
+      <label>
+        <span data-i18n="l_day">Ngày âm</span>
+        <select id="day"></select>
+      </label>
+      <label>
+        <span data-i18n="l_month">Tháng âm</span>
+        <select id="month"></select>
+      </label>
+    </div>
+
+    <label>
+      <span data-i18n="l_repeat">Lặp lại</span>
+      <select id="repeat">
+        <option value="yearly" data-i18n="o_yearly">Hàng năm</option>
+        <option value="monthly" data-i18n="o_monthly">Hàng tháng</option>
+        <option value="once" data-i18n="o_once">Chỉ một lần</option>
+      </select>
+    </label>
+
+    <fieldset>
+      <legend data-i18n="l_remind">Nhắc trước</legend>
+      <label class="chk"><input type="checkbox" id="r7"> <span data-i18n="r_week">Một tuần</span></label>
+      <label class="chk"><input type="checkbox" id="r1" checked> <span data-i18n="r_day">Một ngày</span></label>
+      <label class="chk"><input type="checkbox" id="r0" checked> <span data-i18n="r_morn">Sáng hôm trước</span></label>
+    </fieldset>
+
+    <fieldset>
+      <legend data-i18n="l_opts">Tuỳ chọn</legend>
+      <label class="chk"><input type="checkbox" id="skipleap" checked> <span data-i18n="o_leap">Bỏ qua tháng nhuận</span></label>
+    </fieldset>
+
+    <div class="preview" id="preview"></div>
+
+    <div class="btn-row">
+      <button class="primary" id="create" data-i18n="b_create">Thêm vào Google Calendar</button>
+    </div>
+
+    <div id="msg"></div>
+
+    <div class="acct">
+      <span class="dot" id="dot"></span>
+      <span id="acct-text">Chưa đăng nhập Google</span>
+      <button class="linkbtn" id="signout" data-i18n="b_signout" hidden>Thoát</button>
+    </div>
+  </div>
+
+  <footer>
+    <span data-i18n="foot">Tính bằng thuật toán lịch âm Việt Nam (múi giờ +7).</span><br>
+    <a href="index.html" data-i18n="f_home">Về trang chủ</a> · <a href="privacy.html" data-i18n="f_privacy">Chính sách bảo mật</a>
+  </footer>
+
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+// ─────────────────────────────────────────────────────────────
+// CẤU HÌNH — thay bằng Client ID của bạn nếu dựng trên project khác.
+// Origin của trang này phải nằm trong "Authorized JavaScript origins".
+const CLIENT_ID = '207231627982-fmou9244ot2n0p6i10upo20oln0rso7o.apps.googleusercontent.com';
+const SCOPE = 'https://www.googleapis.com/auth/calendar.events';
+
+// ─────────────────────────────────────────────────────────────
+// Lịch âm Việt Nam — thuật toán Hồ Ngọc Đức, múi giờ +7.
+const TZ = 7;
+
+function jdFromDate(dd, mm, yy) {
+  const a = Math.floor((14 - mm) / 12), y = yy + 4800 - a, m = mm + 12 * a - 3;
+  let jd = dd + Math.floor((153 * m + 2) / 5) + 365 * y
+    + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+  if (jd < 2299161) jd = dd + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - 32083;
+  return jd;
+}
+function jdToDate(jd) {
+  let a, b, c;
+  if (jd > 2299160) { a = jd + 32044; b = Math.floor((4 * a + 3) / 146097); c = a - Math.floor(b * 146097 / 4); }
+  else { b = 0; c = jd + 32082; }
+  const d = Math.floor((4 * c + 3) / 1461), e = c - Math.floor(1461 * d / 4), m = Math.floor((5 * e + 2) / 153);
+  return [e - Math.floor((153 * m + 2) / 5) + 1, m + 3 - 12 * Math.floor(m / 10), b * 100 + d - 4800 + Math.floor(m / 10)];
+}
+function newMoon(k) {
+  const T = k / 1236.85, T2 = T * T, T3 = T2 * T, dr = Math.PI / 180;
+  let Jd1 = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+  Jd1 += 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+  const M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+  const Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+  const F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+  let C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) + 0.0021 * Math.sin(2 * dr * M);
+  C1 = C1 - 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(dr * 2 * Mpr);
+  C1 = C1 - 0.0004 * Math.sin(dr * 3 * Mpr);
+  C1 = C1 + 0.0104 * Math.sin(dr * 2 * F) - 0.0051 * Math.sin(dr * (M + Mpr));
+  C1 = C1 - 0.0074 * Math.sin(dr * (M - Mpr)) + 0.0004 * Math.sin(dr * (2 * F + M));
+  C1 = C1 - 0.0004 * Math.sin(dr * (2 * F - M)) - 0.0006 * Math.sin(dr * (2 * F + Mpr));
+  C1 = C1 + 0.0010 * Math.sin(dr * (2 * F - Mpr)) + 0.0005 * Math.sin(dr * (2 * Mpr + M));
+  const deltat = T < -11
+    ? 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3
+    : -0.000278 + 0.000265 * T + 0.000262 * T2;
+  return Jd1 + C1 - deltat;
+}
+function sunLongitude(jdn) {
+  const T = (jdn - 2451545.0) / 36525, T2 = T * T, dr = Math.PI / 180;
+  const M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
+  const L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
+  let DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+  DL += (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+  let L = (L0 + DL) * dr;
+  return L - Math.PI * 2 * Math.floor(L / (Math.PI * 2));
+}
+const nmDay = k => Math.floor(newMoon(k) + 0.5 + TZ / 24);
+const sunLong = d => Math.floor(sunLongitude(d - 0.5 - TZ / 24) / Math.PI * 6);
+function lunarMonth11(yy) {
+  const k = Math.floor((jdFromDate(31, 12, yy) - 2415021) / 29.530588853);
+  let nm = nmDay(k);
+  if (sunLong(nm) >= 9) nm = nmDay(k - 1);
+  return nm;
+}
+function leapOffset(a11) {
+  const k = Math.floor((a11 - 2415021.076998695) / 29.530588853 + 0.5);
+  let i = 1, last, arc = sunLong(nmDay(k + i));
+  do { last = arc; i++; arc = sunLong(nmDay(k + i)); } while (arc !== last && i < 14);
+  return i - 1;
+}
+function solarToLunar(dd, mm, yy) {
+  const dayNumber = jdFromDate(dd, mm, yy);
+  const k = Math.floor((dayNumber - 2415021.076998695) / 29.530588853);
+  let monthStart = nmDay(k + 1);
+  if (monthStart > dayNumber) monthStart = nmDay(k);
+  let a11 = lunarMonth11(yy), b11 = a11, lunarYear;
+  if (a11 >= monthStart) { lunarYear = yy; a11 = lunarMonth11(yy - 1); }
+  else { lunarYear = yy + 1; b11 = lunarMonth11(yy + 1); }
+  const lunarDay = dayNumber - monthStart + 1;
+  const diff = Math.floor((monthStart - a11) / 29);
+  let leap = 0, lunarMonth = diff + 11;
+  if (b11 - a11 > 365) {
+    const lo = leapOffset(a11);
+    if (diff >= lo) { lunarMonth = diff + 10; if (diff === lo) leap = 1; }
+  }
+  if (lunarMonth > 12) lunarMonth -= 12;
+  if (lunarMonth >= 11 && diff < 4) lunarYear -= 1;
+  return { day: lunarDay, month: lunarMonth, year: lunarYear, leap };
+}
+const CAN = ['Canh','Tân','Nhâm','Quý','Giáp','Ất','Bính','Đinh','Mậu','Kỷ'];
+const CHI = ['Thân','Dậu','Tuất','Hợi','Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi'];
+const canChi = y => CAN[y % 10] + ' ' + CHI[y % 12];
+const WD = {
+  vi: ['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'],
+  en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+};
+const pad = n => String(n).padStart(2, '0');
+// Ngày dương: tiếng Việt dùng dd/mm/yyyy, tiếng Anh dùng dd MMM yyyy cho khỏi
+// nhầm với mm/dd/yyyy của Mỹ.
+const MON_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtSolar(o) {
+  const wd = WD[LANG][new Date(o.y, o.m - 1, o.d).getDay()];
+  return LANG === 'vi'
+    ? `${wd}, ${pad(o.d)}/${pad(o.m)}/${o.y}`
+    : `${wd}, ${pad(o.d)} ${MON_EN[o.m - 1]} ${o.y}`;
+}
+
+function occurrences(cfg, limit) {
+  const n = new Date();
+  const startJd = jdFromDate(n.getDate(), n.getMonth() + 1, n.getFullYear());
+  const out = [];
+  const horizon = cfg.repeat === 'monthly' ? 800 : 2400;
+  for (let i = 0; i <= horizon && out.length < limit; i++) {
+    const [d, m, y] = jdToDate(startJd + i);
+    const l = solarToLunar(d, m, y);
+    if (cfg.skipLeap && l.leap) continue;
+    if (cfg.repeat !== 'monthly' && l.month !== cfg.month) continue;
+    if (l.day !== cfg.day) continue;
+    out.push({ d, m, y, lunar: l });
+  }
+  return out;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Song ngữ
+let LANG = 'vi';
+
+const T = {
+  vi: {
+    docTitle: 'Thêm ngày âm lịch — Nhắc Âm Lịch',
+    intro1:'Thêm một ngày âm lịch — giỗ, mùng một, ngày rằm, đám cưới — vào Google Calendar của bạn. Trang tính sẵn ngày dương tương ứng cho nhiều năm tới.',
+    intro2:'Bạn chỉ cần đăng nhập Google ở bước cuối, khi bấm tạo sự kiện. Quyền duy nhất được xin là quyền tạo và sửa sự kiện trên lịch của chính bạn. Không có tài khoản nào phải lập, không dữ liệu nào rời khỏi máy bạn ngoài chính sự kiện bạn vừa tạo.',
+    intro_home:'Giới thiệu tiện ích', intro_privacy:'Chính sách bảo mật',
+    l_title:'Tên sự kiện', ph_title:'vd: Giỗ bà nội',
+    l_day:'Ngày âm', l_month:'Tháng âm', l_repeat:'Lặp lại',
+    o_yearly:'Hàng năm', o_monthly:'Hàng tháng', o_once:'Chỉ một lần',
+    l_remind:'Nhắc trước', r_week:'Một tuần', r_day:'Một ngày', r_morn:'Sáng hôm trước',
+    l_opts:'Tuỳ chọn', o_leap:'Bỏ qua tháng nhuận',
+    b_create:'Thêm vào Google Calendar', b_signout:'Thoát',
+    foot:'Tính bằng thuật toán lịch âm Việt Nam (múi giờ +7).',
+    f_home:'Về trang chủ', f_privacy:'Chính sách bảo mật',
+    monthName: i => i === 1 ? 'Tháng Giêng' : i === 12 ? 'Tháng Chạp' : 'Tháng ' + i,
+    lunarToday: l => `${l.day}/${l.month}${l.leap ? ' (nhuận)' : ''} âm lịch — năm ${canChi(l.year)}`,
+    lunarShort: l => `${l.day}/${l.month} âm`,
+    pv_once:'Sẽ nhắc vào', pv_next:'Những lần sắp tới',
+    pv_more: n => `Sẽ tạo ${n} lần tới trên lịch.`,
+    pv_none:'Không tìm được ngày dương phù hợp. Thử ngày khác.',
+    acct_off:'Chưa đăng nhập Google', acct_on:'Đã kết nối Google Calendar',
+    m_needTitle:'Đặt tên cho sự kiện đã.',
+    m_opening:'Đang mở đăng nhập Google…',
+    m_creating:'Đang tạo trên Google Calendar…',
+    m_signedOut:'Đã thoát.',
+    m_loading:'Đang tải Google, thử lại sau một giây.',
+    m_authFail: e => 'Không đăng nhập được: ' + e,
+    m_fail: e => 'Không tạo được: ' + e,
+    m_ok: (t, n, d) => `Đã thêm "${t}" — ${n} lần, bắt đầu ${d}.`
+  },
+  en: {
+    docTitle: 'Add a lunar date — Nhắc Âm Lịch',
+    intro1:'Add a Vietnamese lunar-calendar date — a death anniversary, the first or fifteenth of the lunar month, a wedding — to your Google Calendar. This page works out the matching Gregorian dates for years ahead.',
+    intro2:'You only sign in with Google at the last step, when you create the event. The single permission requested is to create and edit events on your own calendar. There is no account to register, and nothing leaves your device except the event you just created.',
+    intro_home:'About the extension', intro_privacy:'Privacy Policy',
+    l_title:'Event name', ph_title:'e.g. Grandmother’s anniversary',
+    l_day:'Lunar day', l_month:'Lunar month', l_repeat:'Repeats',
+    o_yearly:'Every year', o_monthly:'Every lunar month', o_once:'Once only',
+    l_remind:'Remind me', r_week:'A week before', r_day:'A day before', r_morn:'Morning before',
+    l_opts:'Options', o_leap:'Skip leap months',
+    b_create:'Add to Google Calendar', b_signout:'Sign out',
+    foot:'Computed with a Vietnamese lunar-calendar algorithm (UTC+7).',
+    f_home:'Home', f_privacy:'Privacy Policy',
+    monthName: i => 'Month ' + i,
+    lunarToday: l => `Lunar ${l.day}/${l.month}${l.leap ? ' (leap)' : ''} — year of ${canChi(l.year)}`,
+    lunarShort: l => `lunar ${l.day}/${l.month}`,
+    pv_once:'Will remind you on', pv_next:'Upcoming dates',
+    pv_more: n => `${n} upcoming dates will be created on your calendar.`,
+    pv_none:'No matching Gregorian date found. Try another day.',
+    acct_off:'Not signed in to Google', acct_on:'Connected to Google Calendar',
+    m_needTitle:'Give the event a name first.',
+    m_opening:'Opening Google sign-in…',
+    m_creating:'Creating on Google Calendar…',
+    m_signedOut:'Signed out.',
+    m_loading:'Google is still loading, try again in a second.',
+    m_authFail: e => 'Could not sign in: ' + e,
+    m_fail: e => 'Could not create: ' + e,
+    m_ok: (t, n, d) => `Added “${t}” — ${n} date${n > 1 ? 's' : ''}, starting ${d}.`
+  }
+};
+const t = () => T[LANG];
+
+// ─────────────────────────────────────────────────────────────
+// Giao diện
+const $ = id => document.getElementById(id);
+
+function renderToday() {
+  const n = new Date();
+  const o = { d: n.getDate(), m: n.getMonth() + 1, y: n.getFullYear() };
+  $('t-solar').textContent = fmtSolar(o);
+  $('t-lunar').textContent = t().lunarToday(solarToLunar(o.d, o.m, o.y));
+}
+
+function fillSelects() {
+  const day = $('day'), month = $('month');
+  const keepDay = day.value, keepMonth = month.value;
+  day.textContent = ''; month.textContent = '';
+  for (let i = 1; i <= 30; i++) {
+    const o = document.createElement('option');
+    o.value = o.textContent = String(i);
+    day.append(o);
+  }
+  for (let i = 1; i <= 12; i++) {
+    const o = document.createElement('option');
+    o.value = String(i);
+    o.textContent = t().monthName(i);
+    month.append(o);
+  }
+  if (keepDay) day.value = keepDay;
+  if (keepMonth) month.value = keepMonth;
+}
+
+function readForm() {
+  return {
+    title: $('title').value.trim(),
+    day: Number($('day').value),
+    month: Number($('month').value),
+    repeat: $('repeat').value,
+    skipLeap: $('skipleap').checked,
+    remind: ['r7','r1','r0'].filter(id => $(id).checked)
+                            .map(id => ({ r7: 7, r1: 1, r0: 0 })[id])
+  };
+}
+
+function renderPreview() {
+  const cfg = readForm();
+  $('month').closest('label').hidden = cfg.repeat === 'monthly';
+  const wanted = cfg.repeat === 'once' ? 1 : 6;
+  const occs = occurrences(cfg, wanted);
+  const box = $('preview');
+  box.textContent = '';
+  if (!occs.length) {
+    const p = document.createElement('h3');
+    p.textContent = t().pv_none;
+    box.append(p);
+    return;
+  }
+  const h = document.createElement('h3');
+  h.textContent = cfg.repeat === 'once' ? t().pv_once : t().pv_next;
+  box.append(h);
+  const ol = document.createElement('ol');
+  for (const o of occs) {
+    const li = document.createElement('li');
+    li.textContent = `${fmtSolar(o)} — ${t().lunarShort(o.lunar)}`;
+    ol.append(li);
+  }
+  box.append(ol);
+  if (cfg.repeat !== 'once') {
+    const m = document.createElement('div');
+    m.className = 'more';
+    m.textContent = t().pv_more(cfg.repeat === 'monthly' ? 24 : 6);
+    box.append(m);
+  }
+}
+
+// Đổi ngôn ngữ: vẽ lại mọi thứ động, kể cả danh sách tháng và phần xem trước.
+function applyLang(lang) {
+  LANG = lang;
+  const d = t();
+  for (const [k, v] of Object.entries(d)) {
+    if (typeof v !== 'string') continue;
+    for (const n of document.querySelectorAll('[data-i18n="' + k + '"]')) n.textContent = v;
+  }
+  $('title').placeholder = d.ph_title;
+  // Liên kết ra trang giới thiệu / chính sách phải trỏ đúng bản ngôn ngữ.
+  const links = document.querySelectorAll('.introlinks a');
+  if (links.length === 2) {
+    links[0].href = lang === 'vi' ? 'vi.html' : 'index.html';
+    links[1].href = lang === 'vi' ? 'privacy-vi.html' : 'privacy.html';
+  }
+  document.title = d.docTitle;
+  document.documentElement.lang = lang;
+  setAcct(Boolean(accessToken));
+  fillSelects();
+  renderToday();
+  renderPreview();
+  for (const b of document.querySelectorAll('.langbar button')) {
+    b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+  }
+  try { localStorage.setItem('lang', lang); } catch (e) {}
+}
+
+['title','day','month','repeat','skipleap','r7','r1','r0']
+  .forEach(id => $(id).addEventListener('change', renderPreview));
+
+function say(text, kind) {
+  const el = $('msg');
+  el.textContent = text || '';
+  el.className = text ? 'msg ' + (kind || '') : '';
+}
+
+// ─────────────────────────────────────────────────────────────
+// Đăng nhập Google — Google Identity Services, token nằm trong bộ nhớ trang,
+// không lưu xuống máy.
+let accessToken = null;
+let tokenClient = null;
+
+function ensureTokenClient() {
+  if (tokenClient) return true;
+  if (!window.google?.accounts?.oauth2) return false;
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPE,
+    callback: (resp) => {
+      if (resp.error) { say(t().m_authFail(resp.error), 'bad'); return; }
+      accessToken = resp.access_token;
+      setAcct(true);
+      doCreate();
+    }
+  });
+  return true;
+}
+
+function setAcct(on) {
+  $('dot').className = 'dot' + (on ? ' on' : '');
+  $('acct-text').textContent = on ? t().acct_on : t().acct_off;
+  $('signout').hidden = !on;
+}
+
+$('signout').addEventListener('click', () => {
+  if (accessToken) google.accounts.oauth2.revoke(accessToken, () => {});
+  accessToken = null;
+  setAcct(false);
+  say(t().m_signedOut, 'good');
+});
+
+// ─────────────────────────────────────────────────────────────
+// Tạo sự kiện
+function reminderOverrides(remind) {
+  const set = new Set();
+  for (const n of (remind.length ? remind : [0])) set.add(Math.max(n, 1) * 1440 - 540);
+  return [...set].sort((a, b) => a - b).slice(0, 5).map(minutes => ({ method: 'popup', minutes }));
+}
+
+async function doCreate() {
+  const cfg = readForm();
+  if (!cfg.title) { say(t().m_needTitle, 'bad'); return; }
+
+  const count = cfg.repeat === 'once' ? 1 : (cfg.repeat === 'monthly' ? 24 : 6);
+  const occs = occurrences(cfg, count);
+  if (!occs.length) { say(t().pv_none, 'bad'); return; }
+
+  const first = occs[0];
+  const rest = occs.slice(1).map(o => `${o.y}${pad(o.m)}${pad(o.d)}`);
+  const endDt = new Date(first.y, first.m - 1, first.d + 1);
+
+  const rule = LANG === 'vi'
+    ? (cfg.repeat === 'once' ? 'chỉ một lần'
+      : cfg.repeat === 'monthly' ? `ngày ${cfg.day} âm lịch hàng tháng`
+      : `ngày ${cfg.day}/${cfg.month} âm lịch hàng năm`)
+    : (cfg.repeat === 'once' ? 'once only'
+      : cfg.repeat === 'monthly' ? `lunar day ${cfg.day}, every lunar month`
+      : `lunar ${cfg.day}/${cfg.month}, every year`);
+
+  const description = LANG === 'vi'
+    ? `${cfg.title} — ${rule}.\nNgày dương tính theo lịch âm Việt Nam (múi giờ +7)`
+      + `${cfg.skipLeap ? ', bỏ qua tháng nhuận' : ''}.\nTạo từ Nhắc Âm Lịch trên web.`
+    : `${cfg.title} — ${rule}.\nGregorian dates computed with the Vietnamese lunar calendar (UTC+7)`
+      + `${cfg.skipLeap ? ', skipping leap months' : ''}.\nCreated with Nhắc Âm Lịch on the web.`;
+
+  const body = {
+    summary: cfg.title,
+    description,
+    start: { date: `${first.y}-${pad(first.m)}-${pad(first.d)}` },
+    end: { date: `${endDt.getFullYear()}-${pad(endDt.getMonth() + 1)}-${pad(endDt.getDate())}` },
+    transparency: 'transparent',
+    reminders: { useDefault: false, overrides: reminderOverrides(cfg.remind) },
+    // Dữ liệu có cấu trúc để extension trên máy tính đọc lại và tiếp quản.
+    // Không parse từ phần mô tả — chữ nghĩa đổi là hỏng.
+    extendedProperties: {
+      private: {
+        amLich: '1',      // nhãn chung, extension dò theo nhãn này
+        amLichWeb: '1',   // nhãn cũ, giữ cho bản extension đời trước
+
+        amLichDay: String(cfg.day),
+        amLichMonth: cfg.repeat === 'monthly' ? '' : String(cfg.month),
+        amLichRepeat: cfg.repeat,
+        amLichSkipLeap: cfg.skipLeap ? '1' : '0',
+        amLichRemind: (cfg.remind.length ? cfg.remind : [0]).join(','),
+        amLichOnce: cfg.repeat === 'once'
+          ? `${first.y}-${pad(first.m)}-${pad(first.d)}` : ''
+      }
+    }
+  };
+  if (rest.length) body.recurrence = [`RDATE;VALUE=DATE:${rest.join(',')}`];
+
+  $('create').disabled = true;
+  say(t().m_creating);
+  try {
+    const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error?.message || (LANG === 'vi' ? 'Lỗi không rõ' : 'Unknown error'));
+    say(t().m_ok(cfg.title, occs.length, fmtSolar(first)), 'good');
+    $('title').value = '';
+    renderPreview();
+  } catch (e) {
+    say(t().m_fail(e.message), 'bad');
+  } finally {
+    $('create').disabled = false;
+  }
+}
+
+$('create').addEventListener('click', () => {
+  if (!readForm().title) { say(t().m_needTitle, 'bad'); return; }
+  if (accessToken) { doCreate(); return; }
+  if (!ensureTokenClient()) { say(t().m_loading, 'bad'); return; }
+  say(t().m_opening);
+  tokenClient.requestAccessToken();
+});
+
+// ─────────────────────────────────────────────────────────────
+// Khởi động: chọn ngôn ngữ rồi vẽ toàn bộ giao diện một lượt.
+for (const b of document.querySelectorAll('.langbar button')) {
+  b.addEventListener('click', () => applyLang(b.dataset.lang));
+}
+
+let startLang = 'vi';
+try {
+  const saved = localStorage.getItem('lang');
+  if (saved === 'vi' || saved === 'en') startLang = saved;
+  else if (!navigator.language.toLowerCase().startsWith('vi')) startLang = 'en';
+} catch (e) {}
+applyLang(startLang);
+</script>
+</body>
+</html>

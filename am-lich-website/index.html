@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nhắc Âm Lịch</title>
+<meta name="description" content="Browser extension for Vietnamese lunar-calendar reminders — death anniversaries, the first and fifteenth of each lunar month — synced to Google Calendar.">
+<link rel="stylesheet" href="style.css">
+<style>
+  .langbar { margin: 0 0 22px; font-size: 13px; }
+  .langbar a { color: var(--muted); border: 1px solid var(--line); background: var(--panel);
+               border-radius: 8px; padding: 6px 13px; text-decoration: none; display: inline-block; }
+  .langbar a:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <div class="mark">🌙</div>
+    <h1>Nhắc Âm Lịch</h1>
+  </header>
+
+    <p class="langbar"><a href="vi.html">Tiếng Việt</a></p>
+
+<p class="lede">
+    A browser extension for the dates that follow the Vietnamese lunar calendar — death
+    anniversaries, the first and fifteenth of each lunar month, weddings — pushed to your
+    Google Calendar so they show up on every device.
+  </p>
+
+  <div class="card">
+    <h3>Why this app asks for your Google Calendar data</h3>
+    <p>
+      Nhắc Âm Lịch requests one Google OAuth scope, <code>calendar.events</code>, and only if you
+      choose to turn syncing on. It uses that access for exactly one purpose: to create and update
+      the lunar-date reminder events you yourself add in the extension, on your own calendar, so
+      that they appear on your phone and every other device where you read that calendar.
+    </p>
+    <p>
+      It does not read your existing events, your email, your contacts or your browsing history.
+      It does not sell, share or transmit your data to anyone — there is no server in this app to
+      send it to. Every lunar-date calculation runs inside your own browser.
+    </p>
+    <p style="margin-bottom:0">
+      You can revoke the access at any time, from the extension's settings or from your
+      Google Account permissions page. Full details:
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a>.
+    </p>
+  </div>
+
+  <h2>Why this needs its own tool</h2>
+  <p>
+    Lunar dates do not repeat on a fixed Gregorian cycle. The 19th of one lunar month falls
+    on 29 September; the next occurrence is 28 October. That is why ordinary calendar apps
+    cannot express a lunar repeat — their "monthly" rule is anchored to Gregorian dates.
+  </p>
+  <p>
+    Nhắc Âm Lịch computes each occurrence individually using a Vietnamese lunar-calendar
+    algorithm, creates dozens of upcoming dates in advance, and extends the series every day
+    so the list never runs out.
+  </p>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Converts any lunar date to its Gregorian equivalent — repeating monthly, yearly, or just once.</li>
+    <li>Handles leap months and short months correctly — the two things people most often get wrong by hand.</li>
+    <li>Fires local notifications a week before, a day before, or on the day — your choice.</li>
+    <li>Syncs to Google Calendar as all-day events, if you enable it.</li>
+  </ul>
+
+  <div class="card">
+    <h3>Add dates from your phone</h3>
+    <p>
+      Nothing to install. Open the <a href="app.html"><strong>add-a-date page</strong></a>,
+      sign in with Google, pick a lunar date — the event goes straight to your calendar and
+      appears on every device. Add it to your home screen to use it like an app.
+    </p>
+    <p style="margin-bottom:0">
+      If you also run the desktop extension, dates added from your phone flow back into it on
+      the next sync.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>All computation happens on your machine</h3>
+    <p style="margin-bottom:0">
+      The lunar algorithm ships inside the extension. No server computes anything for you, no
+      internet connection is needed to look up a date, and there is no account to create. The
+      only network connection is to Google Calendar, and only if you turn it on.
+    </p>
+  </div>
+
+  <h2>Google access</h2>
+  <p>
+    If you enable sync, the extension requests exactly one scope: <code>calendar.events</code> —
+    create and edit events on your calendar. It does not read email, contacts, or browsing
+    history. The full details are in the <a href="privacy.html">Privacy Policy</a>.
+  </p>
+
+  <h2>Source code</h2>
+  <p>
+    The extension loads no code from any server and contains no obfuscated or minified code.
+    You can unzip the package and read all of it.
+  </p>
+
+  <footer>
+    <a href="app.html">Add a date</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+  </footer>
+
+</div>
+</body>
+</html>

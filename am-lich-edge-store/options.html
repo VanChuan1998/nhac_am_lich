@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Nhắc Âm Lịch — Cài đặt</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Đồng bộ Google Calendar</h1>
+  <p class="lede">
+    Bấm một nút, chọn tài khoản Google, xong. Extension sẽ tự đẩy các ngày âm lịch
+    lên lịch của bạn và tự gia hạn mãi về sau.
+  </p>
+
+  <section class="status" id="status-box">
+    <div class="dot" id="dot"></div>
+    <div>
+      <div id="status-text">Đang kiểm tra…</div>
+      <div class="sub" id="status-sub"></div>
+    </div>
+  </section>
+
+  <div class="actions big">
+    <button type="button" id="connect" class="primary">Đăng nhập bằng Google</button>
+    <button type="button" id="syncnow">Đồng bộ ngay</button>
+    <button type="button" id="disconnect" class="ghost">Ngắt kết nối</button>
+  </div>
+  <p class="note" id="result"></p>
+
+  <section class="callout">
+    <h3>Lần đầu đăng nhập sẽ thấy màn hình cảnh báo</h3>
+    <p>
+      Google sẽ hiện <em>"Google hasn't verified this app"</em>. Bấm
+      <strong>Advanced</strong> → <strong>Go to Nhac Am Lich (unsafe)</strong> để đi tiếp.
+    </p>
+    <p>
+      Cảnh báo đó chỉ có nghĩa là ứng dụng chưa qua quy trình thẩm định của Google —
+      một quy trình đòi hỏi tên miền và trang chính sách công khai, thứ mà một
+      extension chạy trong máy bạn không có. Nó không phải dấu hiệu ứng dụng độc hại.
+    </p>
+  </section>
+
+  <h2>Extension đẩy gì lên lịch?</h2>
+  <ul class="facts">
+    <li>Mỗi sự kiện âm lịch thành <strong>một chuỗi sự kiện cả ngày</strong> trên lịch chính, không chiếm chỗ bận.</li>
+    <li>Hàng tháng đẩy trước <strong>26 lần</strong>, hàng năm đẩy trước <strong>6 lần</strong>, và <strong>tự gia hạn mỗi ngày</strong> — nên chuỗi không bao giờ cạn.</li>
+    <li>Sửa, tắt hoặc xoá sự kiện trong extension thì trên lịch cũng đổi theo ở lần đồng bộ kế tiếp.</li>
+    <li>Google chỉ nhắc được <em>trước</em> giờ bắt đầu, mà sự kiện cả ngày bắt đầu lúc 0h. Nên mốc “đúng ngày” trên lịch quy về <strong>9:00 sáng hôm trước</strong>. Thông báo đúng ngày vẫn do extension bắn trên Edge.</li>
+    <li>Quyền xin của Google chỉ là <code>calendar.events</code> — tạo và sửa sự kiện. Extension không đọc email, không đọc lịch sử duyệt web, không nạp mã từ máy chủ nào.</li>
+  </ul>
+
+  <h2>Dữ liệu của bạn nằm ở đâu</h2>
+  <ul class="facts">
+    <li><strong>Gói cài không chứa bí mật nào.</strong> Extension dùng luồng OAuth không cần client secret, nên dù ai giải nén gói ra cũng không lấy được thứ gì dùng để mạo danh ứng dụng.</li>
+    <li><strong>Mọi thứ nằm trong <code>storage.local</code> của máy này</strong> — danh sách sự kiện lẫn token. Không có gì đồng bộ đi đâu, kể cả sang máy khác của chính bạn. Tên ngày giỗ là chuyện riêng của mỗi nhà và nó ở lại trong máy.</li>
+    <li>Mỗi người dùng có dữ liệu riêng biệt. Extension hoạt động như một ứng dụng cài trong máy, không phải một kho chung.</li>
+    <li>Ngoài Google Calendar khi bạn bật đồng bộ, extension không gửi dữ liệu tới bất kỳ nơi nào khác.</li>
+  </ul>
+
+  <details class="adv">
+    <summary>Nâng cao — dùng khoá OAuth của riêng bạn</summary>
+    <p class="lede">
+      Extension đã có sẵn Client ID, bạn không cần làm gì ở đây. Chỉ dùng phần này nếu
+      muốn chạy trên project Google Cloud của riêng mình. Nhập cả Client ID và secret
+      (client loại <em>Web application</em>) thì extension chuyển sang luồng có refresh
+      token; chỉ nhập Client ID thì vẫn đi luồng không secret.
+    </p>
+    <div class="copyrow">
+      <code id="redirect">—</code>
+      <button type="button" data-copy="redirect">Sao chép</button>
+    </div>
+    <p class="tiny">Redirect URI cần khai trong Google Cloud (loại Web application).</p>
+    <form id="cfg">
+      <label>
+        <span>Client ID</span>
+        <input id="clientId" type="text" spellcheck="false" placeholder="để trống = dùng khoá sẵn có" autocomplete="off">
+      </label>
+      <label>
+        <span>Client secret</span>
+        <input id="clientSecret" type="password" spellcheck="false" placeholder="để trống = dùng khoá sẵn có" autocomplete="off">
+      </label>
+      <div class="actions">
+        <button type="submit">Lưu khoá riêng</button>
+        <button type="button" id="clearkeys" class="ghost">Xoá, quay về khoá sẵn có</button>
+      </div>
+    </form>
+  </details>
+
+</div>
+<script type="module" src="options.js"></script>
+</body>
+</html>

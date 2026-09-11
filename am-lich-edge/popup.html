@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<header id="today">
+  <div class="t-solar" id="t-solar">—</div>
+  <div class="t-lunar" id="t-lunar">—</div>
+</header>
+
+<main>
+  <div id="list" class="list"></div>
+  <div id="empty" class="empty" hidden>
+    <p class="empty-head">Chưa có ngày nào được theo dõi</p>
+    <p class="empty-sub">Thêm ngày giỗ, mùng một, ngày rằm hay một dịp trong gia đình — tiện ích sẽ tự tính ngày dương tương ứng và nhắc bạn.</p>
+  </div>
+
+  <button id="toggle-add" class="add-btn" type="button">+ Thêm ngày âm lịch</button>
+
+  <form id="form" hidden>
+    <label>
+      <span>Tên sự kiện</span>
+      <input id="f-title" type="text" placeholder="vd: Giỗ bà, Rằm tháng Giêng" required maxlength="60">
+    </label>
+
+    <div class="row">
+      <label class="grow">
+        <span>Ngày âm</span>
+        <select id="f-day"></select>
+      </label>
+      <label class="grow">
+        <span>Lặp lại</span>
+        <select id="f-repeat">
+          <option value="monthly">Hàng tháng</option>
+          <option value="yearly">Hàng năm</option>
+          <option value="once">Một lần</option>
+        </select>
+      </label>
+      <label class="grow" id="wrap-month" hidden>
+        <span>Tháng âm</span>
+        <select id="f-month"></select>
+      </label>
+    </div>
+
+    <fieldset>
+      <legend>Nhắc trước</legend>
+      <label class="chk"><input type="checkbox" value="7" id="r7"> 1 tuần</label>
+      <label class="chk"><input type="checkbox" value="1" id="r1" checked> 1 ngày</label>
+      <label class="chk"><input type="checkbox" value="0" id="r0" checked> Đúng ngày</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Tuỳ chọn</legend>
+      <label class="chk"><input type="checkbox" id="f-skipleap" checked> Bỏ qua tháng nhuận</label>
+      <label class="chk" id="wrap-fallback" hidden><input type="checkbox" id="f-fallback" checked> Tháng thiếu thì dùng ngày 29</label>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" class="primary">Lưu</button>
+      <button type="button" id="cancel">Huỷ</button>
+    </div>
+  </form>
+</main>
+
+<footer>
+  <div class="sync" id="sync">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span class="sync-text" id="sync-text">…</span>
+    <button type="button" class="link" id="sync-btn" hidden>Đồng bộ ngay</button>
+    <button type="button" class="link" id="sync-setup">Cài đặt</button>
+  </div>
+  <div class="fine">Tự tính bằng thuật toán lịch âm Việt Nam (múi giờ +7).</div>
+</footer>
+
+<script type="module" src="popup.js"></script>
+</body>
+</html>

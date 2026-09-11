@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nhắc Âm Lịch</title>
+<meta name="description" content="Browser extension for Vietnamese lunar-calendar reminders — death anniversaries, the first and fifteenth of each lunar month — synced to Google Calendar.">
+<link rel="stylesheet" href="style.css">
+<style>
+  .langbar { margin: 0 0 22px; font-size: 13px; }
+  .langbar a { color: var(--muted); border: 1px solid var(--line); background: var(--panel);
+               border-radius: 8px; padding: 6px 13px; text-decoration: none; display: inline-block; }
+  .langbar a:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <div class="mark">🌙</div>
+    <h1>Nhắc Âm Lịch</h1>
+  </header>
+
+    <p class="langbar"><a href="vi.html">English</a></p>
+
+<p class="lede">
+    Tiện ích trình duyệt nhắc bạn những ngày tính theo âm lịch Việt Nam — giỗ chạp,
+    mùng một, ngày rằm, đám cưới — và đẩy chúng lên Google Calendar để hiện trên mọi thiết bị.
+  </p>
+
+  <div class="card">
+    <h3>Vì sao ứng dụng xin quyền Google Calendar của bạn</h3>
+    <p>
+      Nhắc Âm Lịch xin đúng một quyền OAuth là <code>calendar.events</code>, và chỉ khi bạn tự bật
+      đồng bộ. Quyền đó dùng cho đúng một việc: tạo và cập nhật những sự kiện nhắc ngày âm lịch mà
+      chính bạn thêm vào tiện ích, trên lịch của chính bạn, để chúng hiện trên điện thoại và mọi
+      thiết bị khác nơi bạn xem lịch đó.
+    </p>
+    <p>
+      Tiện ích không đọc các sự kiện sẵn có của bạn, không đọc email, danh bạ hay lịch sử duyệt web.
+      Không bán, không chia sẻ, không gửi dữ liệu của bạn đi đâu — ứng dụng này không có máy chủ nào
+      để mà gửi. Mọi phép tính âm lịch chạy ngay trong trình duyệt của bạn.
+    </p>
+    <p style="margin-bottom:0">
+      Bạn có thể thu hồi quyền bất cứ lúc nào, từ phần Cài đặt của tiện ích hoặc từ trang quản lý
+      quyền của Tài khoản Google. Chi tiết đầy đủ:
+      <a href="privacy-vi.html">Chính sách bảo mật</a> · <a href="terms-vi.html">Điều khoản sử dụng</a>.
+    </p>
+  </div>
+
+  <h2>Vì sao cần một tiện ích riêng</h2>
+  <p>
+    Lịch âm không lặp theo chu kỳ cố định của lịch dương. Ngày 19 âm tháng này rơi vào
+    29/09, tháng sau đã nhảy sang 28/10. Vì vậy các ứng dụng lịch thông thường không đặt
+    được lịch lặp cho ngày âm: quy tắc "hằng tháng" của chúng bám vào ngày dương.
+  </p>
+  <p>
+    Nhắc Âm Lịch tự tính từng ngày một bằng thuật toán lịch âm Việt Nam, rồi tạo sẵn hàng
+    chục mốc kế tiếp và tự gia hạn mỗi ngày, nên danh sách không bao giờ cạn.
+  </p>
+
+  <h2>Tiện ích làm gì</h2>
+  <ul>
+    <li>Tính ngày dương tương ứng cho bất kỳ ngày âm nào — lặp hàng tháng, hàng năm, hoặc chỉ nhắc một lần.</li>
+    <li>Xử lý đúng tháng nhuận và tháng thiếu — hai chỗ mà việc tính tay hay sai nhất.</li>
+    <li>Bắn thông báo trên máy trước một tuần, trước một ngày, hoặc đúng ngày, tuỳ bạn chọn.</li>
+    <li>Đồng bộ lên Google Calendar dưới dạng sự kiện cả ngày, nếu bạn cho phép.</li>
+  </ul>
+
+  <div class="card">
+    <h3>Thêm ngày ngay từ điện thoại</h3>
+    <p>
+      Không cần cài gì. Mở <a href="app.html"><strong>trang thêm ngày</strong></a>,
+      đăng nhập Google, chọn ngày âm — sự kiện vào thẳng lịch của bạn và hiện trên
+      mọi thiết bị. Thêm vào màn hình chính để dùng như một ứng dụng.
+    </p>
+    <p style="margin-bottom:0">
+      Nếu bạn cũng dùng tiện ích trên máy tính, những ngày thêm từ điện thoại sẽ
+      tự chảy về đó ở lần đồng bộ kế tiếp.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Tính toán chạy hoàn toàn trong máy bạn</h3>
+    <p style="margin-bottom:0">
+      Thuật toán lịch âm nằm ngay trong tiện ích. Không có máy chủ nào tính hộ, không cần
+      mạng để tra ngày, và không có tài khoản nào phải tạo. Kết nối mạng duy nhất là tới
+      Google Calendar, và chỉ khi bạn tự bật.
+    </p>
+  </div>
+
+  <h2>Quyền truy cập Google</h2>
+  <p>
+    Nếu bạn bật đồng bộ, tiện ích xin đúng một quyền: <code>calendar.events</code> —
+    tạo và sửa sự kiện trên lịch của bạn. Nó không đọc email, không đọc danh bạ, không
+    đọc lịch sử duyệt web. Chi tiết đầy đủ nằm trong
+    <a href="privacy-vi.html">Chính sách bảo mật</a>.
+  </p>
+
+  <h2>Mã nguồn</h2>
+  <p>
+    Tiện ích không nạp mã từ máy chủ nào và không chứa mã rút gọn khó đọc. Bạn có thể
+    giải nén gói cài và đọc toàn bộ mã nguồn.
+  </p>
+
+  <footer>
+    <a href="app.html">Thêm ngày</a>
+    <a href="privacy-vi.html">Chính sách bảo mật</a>
+    <a href="terms-vi.html">Điều khoản sử dụng</a>
+  </footer>
+
+</div>
+</body>
+</html>

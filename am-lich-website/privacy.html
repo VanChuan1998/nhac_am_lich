@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Nhắc Âm Lịch</title>
+<meta name="description" content="Privacy policy for the Nhắc Âm Lịch browser extension: what data is accessed, how it is protected, retained and deleted.">
+<link rel="stylesheet" href="style.css">
+<style>
+  .langbar { margin: 0 0 22px; font-size: 13px; }
+  .langbar a { color: var(--muted); border: 1px solid var(--line); background: var(--panel);
+               border-radius: 8px; padding: 6px 13px; text-decoration: none; display: inline-block; }
+  .langbar a:hover { color: var(--accent); border-color: var(--accent); }
+  .sec + .sec { margin-top: 6px; }
+  .keybox { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 18px 0; }
+  .keybox p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="crumbs"><a href="index.html">← Nhắc Âm Lịch</a></nav>
+
+    <p class="langbar"><a href="privacy-vi.html">Tiếng Việt</a></p>
+
+<h1>Privacy Policy</h1>
+  <p class="updated">
+    For the <strong>Nhắc Âm Lịch</strong> browser extension and the companion web page at
+    nhac-am-lich.chuan-nv.com. Last updated: 9 September 2026.
+  </p>
+
+  <div class="keybox">
+    <p>
+      <strong>Summary.</strong> This application has no server and no database. All lunar-calendar
+      computation runs locally in your browser. Nothing you enter is transmitted to the developer or
+      to any third party. The only data that leaves your device is the calendar events you explicitly
+      ask the application to create, and they go directly to your own Google Calendar.
+    </p>
+  </div>
+
+  <h2>1. Google user data we access</h2>
+  <p>The application requests exactly one OAuth scope:</p>
+  <ul>
+    <li><code>https://www.googleapis.com/auth/calendar.events</code> — create and edit events on the user's calendar.</li>
+  </ul>
+  <p>
+    Using this scope, the application creates, updates and deletes <strong>only the calendar events it
+    created itself</strong>. Every such event is tagged with a private extended property
+    (<code>amLichId</code>), and all read queries filter on that property. The application does not read,
+    modify or delete any other event on the user's calendar, and does not access calendar settings,
+    calendar lists or sharing permissions.
+  </p>
+  <p>
+    The application does <strong>not</strong> request access to Gmail, Google Drive, Contacts, Photos,
+    location, or any other Google service.
+  </p>
+
+  <h2>2. Data stored on the user's device</h2>
+  <table>
+    <tr><th>Data</th><th>Where</th><th>Why</th></tr>
+    <tr>
+      <td>List of lunar dates the user entered: title, lunar day and month, repeat rule, reminder offsets</td>
+      <td><code>chrome.storage.local</code></td>
+      <td>To compute upcoming dates and fire local reminders. Never leaves the device.</td>
+    </tr>
+    <tr>
+      <td>Google OAuth access token, and the IDs of calendar events the application created</td>
+      <td><code>chrome.storage.local</code></td>
+      <td>To call the Google Calendar API and avoid creating duplicate events. Never leaves the device.</td>
+    </tr>
+    <tr>
+      <td>Timestamps of reminders already shown</td>
+      <td><code>chrome.storage.local</code></td>
+      <td>To avoid notifying the user twice for the same date. Never leaves the device.</td>
+    </tr>
+  </table>
+  <p>
+    The application does not store email addresses, passwords, contacts, browsing history, location,
+    advertising identifiers, or any analytics identifier.
+  </p>
+
+  <h2>3. How we protect your data</h2>
+  <p>
+    Security procedures are in place to protect the confidentiality of Google user data. Specifically:
+  </p>
+  <ul>
+    <li>
+      <strong>Encryption in transit.</strong> All communication with Google is performed over HTTPS
+      (TLS). The application makes no plaintext network requests. Its network access is restricted at
+      the manifest level to <code>googleapis.com</code> and <code>oauth2.googleapis.com</code>.
+    </li>
+    <li>
+      <strong>Encryption and isolation at rest.</strong> Tokens and user data are stored using the
+      browser's <code>chrome.storage.local</code> API, inside the browser profile directory. The browser
+      isolates each extension's storage so that no other extension, website or script can read it, and
+      the data inherits the disk encryption of the user's operating system where enabled.
+    </li>
+    <li>
+      <strong>No central store to breach.</strong> The developer operates no server, no database and no
+      backup system. Google user data is never transmitted to, or stored on, developer-controlled
+      infrastructure. There is therefore no central repository that could be compromised, and no
+      developer employee can access user data.
+    </li>
+    <li>
+      <strong>Credentials are never handled by the application.</strong> Authentication happens entirely
+      within Google's own OAuth consent flow. The application never sees, receives or stores the user's
+      Google password.
+    </li>
+    <li>
+      <strong>Short-lived credentials.</strong> The access token expires approximately one hour after
+      issue. It is stored only in local extension storage and is never synchronised to any cloud service,
+      including the browser's own account-sync mechanism.
+    </li>
+    <li>
+      <strong>Least privilege.</strong> The application requests the narrowest scope that permits its
+      function. A read-only scope would not allow it to create reminders; the broader
+      <code>calendar</code> scope is not requested because settings, calendar lists and sharing are never
+      touched.
+    </li>
+    <li>
+      <strong>Code integrity.</strong> The extension contains no obfuscated code and loads no remote
+      code. It executes only the JavaScript shipped inside its reviewed package, under the Manifest V3
+      content security policy. It uses no third-party analytics, telemetry, advertising or tracking SDKs.
+    </li>
+  </ul>
+
+  <h2>4. Data retention and deletion</h2>
+  <p>
+    Data is retained only for as long as it serves the purpose for which it was collected, and no
+    longer:
+  </p>
+  <ul>
+    <li>
+      <strong>Access token</strong> — retained until it expires (approximately one hour), or until the
+      user disconnects, whichever comes first. Disconnecting sends a revocation request to Google's
+      <code>oauth2.googleapis.com/revoke</code> endpoint, so the grant is destroyed at Google's end as
+      well as locally.
+    </li>
+    <li>
+      <strong>The user's list of lunar dates</strong> — retained on the user's own device until the user
+      deletes an entry or uninstalls the extension.
+    </li>
+    <li>
+      <strong>Server-side retention</strong> — none, because there is no server. No copy of any user
+      data exists outside the user's own device and the user's own Google account.
+    </li>
+  </ul>
+  <p>How a user can delete their data at any time:</p>
+  <ul>
+    <li><strong>Disconnect</strong> in the extension's settings — revokes the token at Google and clears it locally.</li>
+    <li><strong>Delete an entry</strong> in the extension — the corresponding Google Calendar events are removed on the next sync.</li>
+    <li><strong>Uninstall the extension</strong> — the browser erases all data it stored, with no residue.</li>
+    <li><strong>Revoke access from Google</strong> at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">myaccount.google.com/permissions</a>, independently of the application.</li>
+  </ul>
+  <p>
+    Calendar events already created belong to the user and remain in their Google Calendar after
+    disconnecting; the user may delete them there at any time.
+  </p>
+
+  <h2>5. Sharing and transfer</h2>
+  <p>
+    Google user data is <strong>never</strong> transferred, sold, rented or disclosed to any third party.
+    There are no service providers, no processors, no affiliates and no advertising partners, because
+    there is no infrastructure through which data could pass.
+  </p>
+
+  <h2>6. Limited use and prohibited uses</h2>
+  <p>
+    The application's use of information received from Google APIs adheres to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noreferrer">Google API Services User Data Policy</a>,
+    including its Limited Use requirements.
+  </p>
+  <p>Google user data is explicitly <strong>not</strong> used:</p>
+  <ul>
+    <li>for advertising, retargeting, or personalised or interest-based advertising;</li>
+    <li>for determining creditworthiness or for any lending purpose;</li>
+    <li>for sale or transfer to data brokers, information resellers or any other party;</li>
+    <li>to develop, improve or train generalised artificial-intelligence or machine-learning models;</li>
+    <li>for any purpose other than providing the user-facing reminder features described in this policy.</li>
+  </ul>
+  <p>
+    No human reads Google user data. The developer has no technical means of doing so.
+  </p>
+
+  <h2>7. The companion web page</h2>
+  <p>
+    The page at <code>nhac-am-lich.chuan-nv.com</code> lets users add lunar dates from a phone. It follows
+    the same principles: the lunar algorithm runs in the visitor's browser, the access token is held only
+    in the page's memory and is discarded when the tab closes, nothing is written to a database, and no
+    cookies or analytics are used. The page loads Google's official identity script
+    (<code>accounts.google.com/gsi/client</code>) solely to display Google's sign-in dialog.
+  </p>
+
+  <h2>8. Children</h2>
+  <p>
+    The application is not directed to children under 13 and does not knowingly collect data from them.
+  </p>
+
+  <h2>9. Changes to this policy</h2>
+  <p>
+    If this policy changes, the revised version will be published at this address with an updated date.
+    Any change that would broaden the scope of data accessed will require the user to grant consent
+    again.
+  </p>
+
+  <h2>10. Contact</h2>
+  <p>
+    Questions about this policy may be sent to
+    <a href="mailto:chuan.nguyen.van.ttbn@gmail.com">chuan.nguyen.van.ttbn@gmail.com</a>.
+  </p>
+
+  <footer>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms of Use</a>
+  </footer>
+
+</div>
+</body>
+</html>

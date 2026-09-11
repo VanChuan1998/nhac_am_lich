@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Nhắc Âm Lịch</title>
+<meta name="description" content="Privacy policy for the Nhắc Âm Lịch browser extension: what data is accessed, how it is protected, retained and deleted.">
+<link rel="stylesheet" href="style.css">
+<style>
+  .langbar { margin: 0 0 22px; font-size: 13px; }
+  .langbar a { color: var(--muted); border: 1px solid var(--line); background: var(--panel);
+               border-radius: 8px; padding: 6px 13px; text-decoration: none; display: inline-block; }
+  .langbar a:hover { color: var(--accent); border-color: var(--accent); }
+  .sec + .sec { margin-top: 6px; }
+  .keybox { background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 18px 0; }
+  .keybox p:last-child { margin-bottom: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="crumbs"><a href="vi.html">← Nhắc Âm Lịch</a></nav>
+
+    <p class="langbar"><a href="privacy-vi.html">English</a></p>
+
+<h1>Chính sách bảo mật</h1>
+  <p class="updated">
+    Áp dụng cho tiện ích trình duyệt <strong>Nhắc Âm Lịch</strong> và trang web đi kèm tại
+    nhac-am-lich.chuan-nv.com. Cập nhật lần cuối: 9 tháng 9, 2026.
+  </p>
+
+  <div class="keybox">
+    <p>
+      <strong>Tóm tắt.</strong> Ứng dụng này không có máy chủ và không có cơ sở dữ liệu. Toàn bộ việc
+      tính lịch âm chạy ngay trong trình duyệt của bạn. Không có gì bạn nhập vào được gửi tới nhà phát
+      triển hay bất kỳ bên thứ ba nào. Dữ liệu duy nhất rời khỏi máy bạn là những sự kiện lịch mà chính
+      bạn yêu cầu tạo, và chúng đi thẳng tới Google Calendar của bạn.
+    </p>
+  </div>
+
+  <h2>1. Dữ liệu Google mà ứng dụng truy cập</h2>
+  <p>Ứng dụng xin đúng một phạm vi quyền:</p>
+  <ul>
+    <li><code>https://www.googleapis.com/auth/calendar.events</code> — tạo và sửa sự kiện trên lịch của người dùng.</li>
+  </ul>
+  <p>
+    Với quyền này, ứng dụng chỉ tạo, cập nhật và xoá <strong>những sự kiện do chính nó tạo ra</strong>.
+    Mỗi sự kiện được gắn một nhãn riêng (<code>amLichId</code>), và mọi truy vấn đều lọc theo nhãn đó.
+    Ứng dụng không đọc, không sửa, không xoá bất kỳ sự kiện nào khác trên lịch, và không đụng tới cài
+    đặt lịch, danh sách lịch hay quyền chia sẻ.
+  </p>
+  <p>
+    Ứng dụng <strong>không</strong> xin quyền với Gmail, Google Drive, Danh bạ, Ảnh, vị trí, hay bất kỳ
+    dịch vụ Google nào khác.
+  </p>
+
+  <h2>2. Dữ liệu lưu trên máy người dùng</h2>
+  <table>
+    <tr><th>Dữ liệu</th><th>Lưu ở đâu</th><th>Vì sao cần</th></tr>
+    <tr>
+      <td>Danh sách ngày âm lịch người dùng khai: tên, ngày và tháng âm, chu kỳ lặp, mốc nhắc</td>
+      <td><code>chrome.storage.local</code></td>
+      <td>Để tính ngày sắp tới và bắn nhắc. Không rời khỏi máy.</td>
+    </tr>
+    <tr>
+      <td>Access token của Google, và ID các sự kiện ứng dụng đã tạo</td>
+      <td><code>chrome.storage.local</code></td>
+      <td>Để gọi Google Calendar API và tránh tạo trùng sự kiện. Không rời khỏi máy.</td>
+    </tr>
+    <tr>
+      <td>Mốc thời gian các lần đã nhắc</td>
+      <td><code>chrome.storage.local</code></td>
+      <td>Để không nhắc lại hai lần cùng một ngày. Không rời khỏi máy.</td>
+    </tr>
+  </table>
+  <p>
+    Ứng dụng không lưu địa chỉ email, mật khẩu, danh bạ, lịch sử duyệt web, vị trí, định danh quảng cáo,
+    hay bất kỳ mã theo dõi nào.
+  </p>
+
+  <h2>3. Ứng dụng bảo vệ dữ liệu của bạn ra sao</h2>
+  <p>Các biện pháp bảo mật được áp dụng để bảo vệ tính bí mật của dữ liệu người dùng Google:</p>
+  <ul>
+    <li>
+      <strong>Mã hoá khi truyền.</strong> Mọi kết nối tới Google đều qua HTTPS (TLS). Ứng dụng không thực
+      hiện bất kỳ yêu cầu mạng nào không mã hoá, và quyền truy cập mạng bị giới hạn ngay trong manifest
+      chỉ còn <code>googleapis.com</code> và <code>oauth2.googleapis.com</code>.
+    </li>
+    <li>
+      <strong>Cô lập khi lưu trữ.</strong> Token và dữ liệu người dùng nằm trong
+      <code>chrome.storage.local</code>, bên trong thư mục hồ sơ trình duyệt. Trình duyệt cô lập vùng lưu
+      trữ của từng tiện ích nên không tiện ích, trang web hay đoạn mã nào khác đọc được, và dữ liệu được
+      bảo vệ thêm bởi mã hoá ổ đĩa của hệ điều hành nếu người dùng đã bật.
+    </li>
+    <li>
+      <strong>Không có kho tập trung để bị tấn công.</strong> Nhà phát triển không vận hành máy chủ, cơ
+      sở dữ liệu hay hệ thống sao lưu nào. Dữ liệu người dùng Google không bao giờ được truyền tới hay
+      lưu trên hạ tầng của nhà phát triển. Do đó không tồn tại kho dữ liệu tập trung nào có thể bị xâm
+      nhập, và không nhân sự nào có thể tiếp cận dữ liệu người dùng.
+    </li>
+    <li>
+      <strong>Ứng dụng không bao giờ chạm vào thông tin đăng nhập.</strong> Việc xác thực diễn ra hoàn
+      toàn trong luồng đồng ý của chính Google. Ứng dụng không nhìn thấy, không nhận và không lưu mật
+      khẩu Google của người dùng.
+    </li>
+    <li>
+      <strong>Token sống ngắn.</strong> Access token hết hạn sau khoảng một giờ. Nó chỉ nằm trong vùng
+      lưu trữ cục bộ và không được đồng bộ lên bất kỳ dịch vụ đám mây nào, kể cả cơ chế đồng bộ tài khoản
+      của chính trình duyệt.
+    </li>
+    <li>
+      <strong>Quyền tối thiểu.</strong> Ứng dụng xin phạm vi hẹp nhất đủ để hoạt động. Quyền chỉ đọc thì
+      không tạo được lời nhắc; còn quyền <code>calendar</code> rộng hơn thì không cần, vì ứng dụng không
+      bao giờ đụng tới cài đặt, danh sách lịch hay quyền chia sẻ.
+    </li>
+    <li>
+      <strong>Toàn vẹn mã nguồn.</strong> Tiện ích không chứa mã bị làm rối và không nạp mã từ xa. Nó chỉ
+      chạy đúng phần JavaScript nằm trong gói đã được kiểm duyệt, dưới chính sách bảo mật nội dung của
+      Manifest V3. Không dùng bất kỳ SDK phân tích, đo lường, quảng cáo hay theo dõi nào của bên thứ ba.
+    </li>
+  </ul>
+
+  <h2>4. Lưu giữ và xoá dữ liệu</h2>
+  <p>Dữ liệu chỉ được giữ đúng khoảng thời gian phục vụ mục đích đã nêu, không lâu hơn:</p>
+  <ul>
+    <li>
+      <strong>Access token</strong> — giữ tới khi hết hạn (khoảng một giờ), hoặc tới khi người dùng ngắt
+      kết nối, tuỳ điều nào đến trước. Việc ngắt kết nối gửi yêu cầu thu hồi tới
+      <code>oauth2.googleapis.com/revoke</code>, nên quyền bị huỷ cả ở phía Google chứ không chỉ trong máy.
+    </li>
+    <li>
+      <strong>Danh sách ngày âm lịch</strong> — giữ trên máy người dùng cho tới khi họ tự xoá từng mục
+      hoặc gỡ cài đặt tiện ích.
+    </li>
+    <li>
+      <strong>Lưu giữ phía máy chủ</strong> — không có, vì không có máy chủ. Không tồn tại bản sao dữ
+      liệu nào ngoài máy của người dùng và tài khoản Google của chính họ.
+    </li>
+  </ul>
+  <p>Người dùng có thể xoá dữ liệu bất cứ lúc nào:</p>
+  <ul>
+    <li><strong>Ngắt kết nối</strong> trong phần Cài đặt — thu hồi token ở phía Google và xoá trong máy.</li>
+    <li><strong>Xoá một mục</strong> trong tiện ích — các sự kiện tương ứng trên Google Calendar bị xoá ở lần đồng bộ kế tiếp.</li>
+    <li><strong>Gỡ cài đặt tiện ích</strong> — trình duyệt xoá toàn bộ dữ liệu nó đã lưu, không để lại gì.</li>
+    <li><strong>Thu hồi quyền từ phía Google</strong> tại <a href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">myaccount.google.com/permissions</a>, độc lập với ứng dụng.</li>
+  </ul>
+  <p>
+    Những sự kiện đã tạo là của người dùng và vẫn ở lại trên Google Calendar sau khi ngắt kết nối; người
+    dùng có thể tự xoá chúng ở đó bất cứ lúc nào.
+  </p>
+
+  <h2>5. Chia sẻ và chuyển giao</h2>
+  <p>
+    Dữ liệu người dùng Google <strong>không bao giờ</strong> được chuyển giao, bán, cho thuê hay tiết lộ
+    cho bất kỳ bên thứ ba nào. Không có nhà cung cấp dịch vụ, không có đơn vị xử lý, không có đối tác
+    quảng cáo — vì không tồn tại hạ tầng nào để dữ liệu đi qua.
+  </p>
+
+  <h2>6. Sử dụng hạn chế và những việc không làm</h2>
+  <p>
+    Việc sử dụng thông tin nhận từ API của Google tuân thủ
+    <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noreferrer">Chính sách dữ liệu người dùng của Dịch vụ API Google</a>,
+    bao gồm các yêu cầu về Sử dụng hạn chế.
+  </p>
+  <p>Dữ liệu người dùng Google <strong>không</strong> được dùng để:</p>
+  <ul>
+    <li>quảng cáo, tiếp thị lại, hay quảng cáo cá nhân hoá theo sở thích;</li>
+    <li>đánh giá khả năng tín dụng hay bất kỳ mục đích cho vay nào;</li>
+    <li>bán hoặc chuyển cho các đơn vị môi giới dữ liệu, bên bán lại thông tin, hay bất kỳ ai khác;</li>
+    <li>phát triển, cải thiện hay huấn luyện các mô hình trí tuệ nhân tạo hoặc học máy tổng quát;</li>
+    <li>bất kỳ mục đích nào khác ngoài các tính năng nhắc nhở được mô tả trong chính sách này.</li>
+  </ul>
+  <p>Không người nào đọc dữ liệu người dùng Google. Nhà phát triển không có phương tiện kỹ thuật để làm việc đó.</p>
+
+  <h2>7. Trang web đi kèm</h2>
+  <p>
+    Trang tại <code>nhac-am-lich.chuan-nv.com</code> cho phép thêm ngày âm lịch từ điện thoại. Nó theo
+    cùng nguyên tắc: thuật toán lịch âm chạy trong trình duyệt của người truy cập, access token chỉ nằm
+    trong bộ nhớ tạm của trang và mất đi khi đóng tab, không ghi vào cơ sở dữ liệu nào, không dùng cookie
+    hay công cụ phân tích. Trang tải tệp mã xác thực chính thức của Google
+    (<code>accounts.google.com/gsi/client</code>) chỉ để hiển thị hộp thoại đăng nhập của Google.
+  </p>
+
+  <h2>8. Trẻ em</h2>
+  <p>Ứng dụng không hướng tới trẻ em dưới 13 tuổi và không cố ý thu thập dữ liệu từ trẻ em.</p>
+
+  <h2>9. Thay đổi chính sách</h2>
+  <p>
+    Nếu chính sách này thay đổi, phiên bản mới sẽ được đăng tại địa chỉ này kèm ngày cập nhật. Mọi thay
+    đổi làm mở rộng phạm vi dữ liệu được truy cập sẽ đòi hỏi người dùng đồng ý lại.
+  </p>
+
+  <h2>10. Liên hệ</h2>
+  <p>
+    Mọi thắc mắc về chính sách này xin gửi tới
+    <a href="mailto:chuan.nguyen.van.ttbn@gmail.com">chuan.nguyen.van.ttbn@gmail.com</a>.
+  </p>
+
+  <footer>
+    <a href="vi.html">Trang chủ</a>
+    <a href="terms-vi.html">Điều khoản sử dụng</a>
+  </footer>
+
+</div>
+</body>
+</html>
