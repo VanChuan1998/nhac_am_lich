@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Thêm ngày âm lịch — Nhắc Lịch Âm</title>
+<title>Thêm ngày âm lịch — Nhắc Âm Lịch</title>
 <meta name="description" content="Thêm ngày giỗ, mùng một, ngày rằm theo âm lịch Việt Nam thẳng vào Google Calendar, từ điện thoại.">
 <meta name="theme-color" content="#9a3412">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Nhắc Lịch Âm">
+<meta name="apple-mobile-web-app-title" content="Nhắc Âm Lịch">
 <style>
 :root {
   --bg:#fbfaf7; --panel:#fff; --ink:#1c1917; --muted:#78716c;
@@ -317,7 +317,7 @@ let LANG = 'vi';
 
 const T = {
   vi: {
-    docTitle: 'Thêm ngày âm lịch — Nhắc Lịch Âm',
+    docTitle: 'Thêm ngày âm lịch — Nhắc Âm Lịch',
     intro1:'Thêm một ngày âm lịch — giỗ, mùng một, ngày rằm, đám cưới — vào Google Calendar của bạn. Trang tính sẵn ngày dương tương ứng cho nhiều năm tới.',
     intro2:'Bạn chỉ cần đăng nhập Google ở bước cuối, khi bấm tạo sự kiện. Quyền duy nhất được xin là quyền tạo và sửa sự kiện trên lịch của chính bạn. Không có tài khoản nào phải lập, không dữ liệu nào rời khỏi máy bạn ngoài chính sự kiện bạn vừa tạo.',
     intro_home:'Giới thiệu tiện ích', intro_privacy:'Chính sách bảo mật',
@@ -346,7 +346,7 @@ const T = {
     m_ok: (t, n, d) => `Đã thêm "${t}" — ${n} lần, bắt đầu ${d}.`
   },
   en: {
-    docTitle: 'Add a lunar date — Nhắc Lịch Âm',
+    docTitle: 'Add a lunar date — Nhắc Âm Lịch',
     intro1:'Add a Vietnamese lunar-calendar date — a death anniversary, the first or fifteenth of the lunar month, a wedding — to your Google Calendar. This page works out the matching Gregorian dates for years ahead.',
     intro2:'You only sign in with Google at the last step, when you create the event. The single permission requested is to create and edit events on your own calendar. There is no account to register, and nothing leaves your device except the event you just created.',
     intro_home:'About the extension', intro_privacy:'Privacy Policy',
@@ -551,9 +551,9 @@ async function doCreate() {
 
   const description = LANG === 'vi'
     ? `${cfg.title} — ${rule}.\nNgày dương tính theo lịch âm Việt Nam (múi giờ +7)`
-      + `${cfg.skipLeap ? ', bỏ qua tháng nhuận' : ''}.\nTạo từ Nhắc Lịch Âm trên web.`
+      + `${cfg.skipLeap ? ', bỏ qua tháng nhuận' : ''}.\nTạo từ Nhắc Âm Lịch trên web.`
     : `${cfg.title} — ${rule}.\nGregorian dates computed with the Vietnamese lunar calendar (UTC+7)`
-      + `${cfg.skipLeap ? ', skipping leap months' : ''}.\nCreated with Nhắc Lịch Âm on the web.`;
+      + `${cfg.skipLeap ? ', skipping leap months' : ''}.\nCreated with Nhắc Âm Lịch on the web.`;
 
   const body = {
     summary: cfg.title,
