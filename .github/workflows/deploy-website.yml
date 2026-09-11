@@ -1,11 +1,13 @@
 name: Deploy Website to Cloudflare Workers
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
     paths:
       - 'am-lich-website/**'
+      - '.github/workflows/deploy-website.yml'
 
 jobs:
   deploy:
