@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nhắc Âm Lịch</title>
+<title>Nhắc Lịch Âm</title>
 <meta name="description" content="Browser extension for Vietnamese lunar-calendar reminders — death anniversaries, the first and fifteenth of each lunar month — synced to Google Calendar.">
 <link rel="stylesheet" href="style.css">
 <style>
@@ -18,7 +18,7 @@
 
   <header class="site">
     <div class="mark">🌙</div>
-    <h1>Nhắc Âm Lịch</h1>
+    <h1>Nhắc Lịch Âm</h1>
   </header>
 
     <p class="langbar"><a href="vi.html">English</a></p>
@@ -29,9 +29,16 @@
   </p>
 
   <div class="card">
+    <h3>Mục đích của ứng dụng (Purpose of this application)</h3>
+    <p style="margin-bottom:0">
+      Mục đích chính của <strong>Nhắc Lịch Âm</strong> là giúp người dùng dễ dàng theo dõi và nhận thông báo về các sự kiện theo Âm lịch (như ngày rằm, mùng một, ngày giỗ). Vì Google Calendar mặc định không hỗ trợ tạo sự kiện lặp lại theo Âm lịch, ứng dụng này đóng vai trò như một cầu nối: tính toán các ngày Âm lịch ra Dương lịch và đồng bộ chúng lên Google Calendar của bạn để bạn không bao giờ bỏ lỡ các ngày quan trọng.
+    </p>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
     <h3>Vì sao ứng dụng xin quyền Google Calendar của bạn</h3>
     <p>
-      Nhắc Âm Lịch xin đúng một quyền OAuth là <code>calendar.events</code>, và chỉ khi bạn tự bật
+      Nhắc Lịch Âm xin đúng một quyền OAuth là <code>calendar.events</code>, và chỉ khi bạn tự bật
       đồng bộ. Quyền đó dùng cho đúng một việc: tạo và cập nhật những sự kiện nhắc ngày âm lịch mà
       chính bạn thêm vào tiện ích, trên lịch của chính bạn, để chúng hiện trên điện thoại và mọi
       thiết bị khác nơi bạn xem lịch đó.
@@ -55,7 +62,7 @@
     được lịch lặp cho ngày âm: quy tắc "hằng tháng" của chúng bám vào ngày dương.
   </p>
   <p>
-    Nhắc Âm Lịch tự tính từng ngày một bằng thuật toán lịch âm Việt Nam, rồi tạo sẵn hàng
+    Nhắc Lịch Âm tự tính từng ngày một bằng thuật toán lịch âm Việt Nam, rồi tạo sẵn hàng
     chục mốc kế tiếp và tự gia hạn mỗi ngày, nên danh sách không bao giờ cạn.
   </p>
 
